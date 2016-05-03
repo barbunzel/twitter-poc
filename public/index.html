@@ -37,6 +37,11 @@
                 stroke-width: 1;
                 shape-rendering: crispEdges;
             }
+            
+            .abs {
+                position: absolute;
+                color: #44dd12;
+            }
         
         </style>
         <!-- Latest compiled and minified CSS -->
@@ -47,12 +52,12 @@
                 
         <!-- load the d3.js library -->    
             <script src="https://d3js.org/d3.v3.min.js"></script>
-        <title>test</title>
+        <title>Twitter POC</title>
     </head>
     <body>
         
         <div class="container" ng-controller="AppCtrl">
-            <h1>MEAN Twitter compare</h1>
+            <h1>twitter poc</h1>
             <table class="table">
                 <thead>
                     <tr>
@@ -66,6 +71,7 @@
                 </thead>
                 <tbody>
                     <tr>
+                        
                         <th>User 1</th>
                         <th><input ng-model="compare.handle1"></th>
                         <th>vs</th>
@@ -73,10 +79,13 @@
                         <th><input ng-model="compare.handle2"></th>
                         <th><button class="btn btn-primary" ng-click="twitterSearch()">Twitter Search</button></th>
                     </tr>
-                    <tr>
-                        {{fetch}}
-                    </tr>
                 </tbody>
+            </table>
+            
+            <table class="table">
+                <tr>
+                    <td><p class="abs">{{fetch}}</p></td>
+                </tr>
             </table>
             <div>
                 <div class="chart" chart-data="data"></div>
@@ -86,5 +95,12 @@
         
         <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.5/angular.min.js"></script>
         <script src="controllers/controller.js" type="text/javascript" charset="utf-8"></script>
+        <script src="/socket.io/socket.io.js"></script>
+        <script
+            type="text/javascript"
+            src="/lib/angular-socket-io/socket.min.js"></script>
+        <script>
+            var socket = io();
+        </script>
     </body>
 </html>

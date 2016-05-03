@@ -4,18 +4,31 @@ var mongojs = require('mongojs');
 var db = mongojs('tweetlist', ['tweetlist']);
 var bodyParser = require('body-parser');
 var twit = require('twitter');
+var http = require('http');
+var server = http.createServer(app);
+var io = require('socket.io').listen(server);
+app.set('socketio', io);
+app.set('server', server);
+
+server.listen(8080);
+console.log('Server running on port 8080');
 
 
 app.use(express.static(__dirname + '/public'));
 app.use(bodyParser.json());
 
-app.get('/tweetlist', function(req, res) {
+app.get('/test/:text', function(req, res) {
+	io.sockets.emit('test', req.params.text);
+});
 
+
+app.get('/tweetlist', function(req, res) {
 	
 	db.collection('tweetlist').aggregate(
 		[
 			{ $group: { "_id": { user: "$user", date: "$date"}, "count": { $sum: 1 } } }, { $project: { _id: 0, user: "$_id.user", date: "$_id.date", count: "$count" } }, { $sort: { "user": 1, "date": 1 } }
 		]).toArray(function(error, result) {
+				io.sockets.emit('tweetlist', result);
 				res.json(result);
 			});
 	
@@ -74,5 +87,12 @@ app.delete('/deletetweets', function(req, res) {
 	});
 });
 
-app.listen(8080);
-console.log('Server running on port 8080');
+io.on('connection', function(socket){
+  
+  socket.on('disconnect', function(){
+    
+  });
+});
+
+// app.listen(8080);
+// console.log('Server running on port 8080');

@@ -1,6 +1,22 @@
 var myApp = angular.module('myApp', []);
 myApp.controller('AppCtrl', ['$window', '$scope', '$http', function($window, $scope, $http){
     
+    socket.on('tweetlist', function(d) {
+        $scope.$apply(function() {
+            $scope.data = d;
+        })
+    });
+    
+    socket.on('test', function(d) {
+        $scope.$apply(function() {
+            $scope.test = d;
+        })
+    });
+    
+    $scope.testSubmit = function() {
+        $http.get('/test/' + $scope.test)  
+    };
+    
     $scope.data = [
             {"user": "user1", "date": "01/01/2016", "count": 0},
             {"user": "user2", "date": "01/01/2016", "count": 0}
@@ -16,7 +32,7 @@ myApp.controller('AppCtrl', ['$window', '$scope', '$http', function($window, $sc
     });
     
     $scope.twitterSearch = function() {
-        $scope.fetch = 'fetching...';
+        $scope.fetch = 'Fetching data...';
         $http.delete('/deletetweets')
         .success(function(response) {
             $http.post('/gettweets', {"handle": $scope.compare.handle1, "page": 1})
@@ -34,6 +50,8 @@ myApp.controller('AppCtrl', ['$window', '$scope', '$http', function($window, $sc
                                                             $http.get('/tweetlist')
                                                                 .success(function(response) {
                                                                     $scope.data = response;
+                                                                    socket.emit('tweetlist', $scope.data);
+                                                                    $scope.fetch = '';
                                                                 });
                                                         });
                                                 });
@@ -42,7 +60,6 @@ myApp.controller('AppCtrl', ['$window', '$scope', '$http', function($window, $sc
                         });
                 });
         });
-        $scope.fetch = '';
     };
     
 }]);
@@ -78,10 +95,22 @@ myApp.directive("chart", function($window, $parse){
                 .append("g")
                     .attr("transform", 
                           "translate(" + margin.left + "," + margin.top + ")");
+                          
+            svg.append("text")
+                .attr("text-anchor", "middle")
+                .attr("transform", "translate(-35," + 210 + ")rotate(-90)")
+                .attr("font-weight", "bold")
+                .text("Tweets");
+            svg.append("text")
+                .attr("text-anchor", "middle")
+                .attr("transform", "translate(" + (width/2) + ", 460)")
+                .attr("font-weight", "bold")
+                .text("Date");
             var dataGroup;
             
                           
             scope.$watchCollection(attrs.chartData, function(newVal, oldVal) {
+                console.log('this executes')
                 data = newVal;
                 redrawLineChart();
             });
@@ -190,3 +219,12 @@ myApp.directive("chart", function($window, $parse){
         }
     };
 });
+
+angular.module('myApp').factory('Socket', ['socketFactory',
+    function(socketFactory) {
+        return socketFactory({
+            prefix: '',
+            ioSocket: io.connect('http://0.0.0.0:8080')
+        });
+    }
+]);
