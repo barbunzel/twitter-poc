@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html ng-app="myApp">
+    <head>
+        
+        <style> /* set the CSS */
+
+            body { font: 12px Arial;}
+            
+            .line1 { 
+                stroke: #0066ff;
+                stroke-width: 2;
+                fill: none;
+            }
+            
+            .line0 {
+                stroke: #00ccff;
+                stroke-width: 2;
+                fill: none;
+            }
+            
+            .legend1 {
+                fill: #0066ff;
+                font-size: 14px;
+                font-weight: bold;
+            }
+            
+            .legend0 {
+                fill: #00ccff;
+                font-size: 14px;
+                font-weight: bold;
+            }
+            
+            .axis path,
+            .axis line {
+                fill: none;
+                stroke: black;
+                stroke-width: 1;
+                shape-rendering: crispEdges;
+            }
+        
+        </style>
+        <!-- Latest compiled and minified CSS -->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+        
+        <!-- Optional theme -->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css" integrity="sha384-fLW2N01lMqjakBkx3l/M9EahuwpSfeNvV63J5ezn3uZzapT0u7EYsXMjQV+0En5r" crossorigin="anonymous">
+                
+        <!-- load the d3.js library -->    
+            <script src="https://d3js.org/d3.v3.min.js"></script>
+        <title>test</title>
+    </head>
+    <body>
+        
+        <div class="container" ng-controller="AppCtrl">
+            <h1>MEAN Twitter compare</h1>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <th>User 1</th>
+                        <th><input ng-model="compare.handle1"></th>
+                        <th>vs</th>
+                        <th>User 2</th>
+                        <th><input ng-model="compare.handle2"></th>
+                        <th><button class="btn btn-primary" ng-click="twitterSearch()">Twitter Search</button></th>
+                    </tr>
+                </tbody>
+            </table>
+            <div>
+                <div class="chart" chart-data="data"></div>
+            </div>
+        </div>
+    
+        
+        <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.5/angular.min.js"></script>
+        <script src="controllers/controller.js" type="text/javascript" charset="utf-8"></script>
+    </body>
+</html>
