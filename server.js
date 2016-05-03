@@ -23,6 +23,7 @@ app.get('/tweetlist', function(req, res) {
 
 app.post('/gettweets', function(req, res) {
 	var handle = req.body.handle;
+	var page = req.body.page;
 	var twitter = new twit({
 		consumer_key: 'pg5tT5a3qcwv3gGbUd1WXgapO',
 		consumer_secret: '0Pny18Ie89CGximkhwjfglHUwdWWwZR8YIEPKOPTsjo8gOb0oV',
@@ -36,7 +37,7 @@ app.post('/gettweets', function(req, res) {
 	// for( var i = 0; i < 3; i++) {
 		
 		// request('https://api.twitter.com/1.1/statuses/user_timeline.json?screen_name=' + handle + '&&count=200',
-		params = {screen_name: handle, count: 2000};
+		params = {screen_name: handle, count: 2000, page: page};
 		
 		
 		twitter.get('statuses/user_timeline', params, function(error, tweets, response){ 

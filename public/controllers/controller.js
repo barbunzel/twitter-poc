@@ -16,20 +16,33 @@ myApp.controller('AppCtrl', ['$window', '$scope', '$http', function($window, $sc
     });
     
     $scope.twitterSearch = function() {
+        $scope.fetch = 'fetching...';
         $http.delete('/deletetweets')
         .success(function(response) {
-            $http.post('/gettweets', {"handle": $scope.compare.handle1})
+            $http.post('/gettweets', {"handle": $scope.compare.handle1, "page": 1})
                 .success(function(response){
-                    $http.post('/gettweets', {"handle": $scope.compare.handle2})
+                    $http.post('/gettweets', {"handle": $scope.compare.handle1, "page": 2})
                         .success(function(response){
-                            $http.get('/tweetlist')
-                                .success(function(response) {
-                                    $scope.data = response;
+                            $http.post('/gettweets', {"handle": $scope.compare.handle1, "page": 3})
+                                .success(function(response){
+                                    $http.post('/gettweets', {"handle": $scope.compare.handle2, "page": 1})
+                                        .success(function(response){
+                                            $http.post('/gettweets', {"handle": $scope.compare.handle2, "page": 2})
+                                                .success(function(response){
+                                                    $http.post('/gettweets', {"handle": $scope.compare.handle2, "page": 3})
+                                                        .success(function(response){
+                                                            $http.get('/tweetlist')
+                                                                .success(function(response) {
+                                                                    $scope.data = response;
+                                                                });
+                                                        });
+                                                });
+                                        });
                                 });
                         });
                 });
         });
-        
+        $scope.fetch = '';
     };
     
 }]);
@@ -133,7 +146,15 @@ myApp.directive("chart", function($window, $parse){
                         .attr("x", (lSpace / 2) + i * lSpace)
                         .attr("y", 40)
                         .attr("class", "legend" + i)
-                        .text(d.key);
+                        .text(d.key)
+                        .on("click", function() {
+                            var active = d.active ? false : true;
+                            var opacity = active ? 0 : 1;
+                            
+                            d3.select("#line" + i).style("opacity", opacity);
+                            
+                            d.active = active;
+                        });
                 });
             }
             
