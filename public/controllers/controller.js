@@ -31,7 +31,7 @@ myApp.controller('AppCtrl', ['$window', '$scope', '$http', function($window, $sc
         console.log('error');
     });
     
-    $scope.twitterSearch = function() {
+    $scope.twitterSearch = function(isValid) {
         $scope.fetch = 'Fetching data...';
         $http.delete('/deletetweets')
         .success(function(response) {
@@ -52,13 +52,45 @@ myApp.controller('AppCtrl', ['$window', '$scope', '$http', function($window, $sc
                                                                     $scope.data = response;
                                                                     socket.emit('tweetlist', $scope.data);
                                                                     $scope.fetch = '';
+                                                                })
+                                                                .error(function(response) {
+                                                                    $scope.fetch = '';
+                                                                    $scope.error = 'Error connecting to database.';
                                                                 });
+                                                        })
+                                                        .error(function(response) {
+                                                            $scope.fetch = '';
+                                                            $scope.error = 'Error connecting to Twitter. Check that the username exists.';
                                                         });
+                                                })
+                                                .error(function(response) {
+                                                    $scope.fetch = '';
+                                                    $scope.error = 'Error connecting to Twitter. Check that the username exists.';
                                                 });
+                                        })
+                                        .error(function(response) {
+                                            $scope.fetch = '';
+                                            $scope.error = 'Error connecting to Twitter. Check that the username exists.';
                                         });
+                                })
+                                .error(function(response) {
+                                    $scope.fetch = '';
+                                    $scope.error = 'Error connecting to Twitter. Check that the username exists.';
                                 });
+                        })
+                        .error(function(response) {
+                            $scope.fetch = '';
+                            $scope.error = 'Error connecting to Twitter. Check that the username exists.';
                         });
+                })
+                .error(function(response) {
+                    $scope.fetch = '';
+                    $scope.error = 'Error connecting to Twitter. Check that the username exists.';
                 });
+        })
+        .error(function(response) {
+            $scope.fetch = '';
+            $scope.error = 'Error connecting to Twitter. Check that the username exists.';
         });
     };
     

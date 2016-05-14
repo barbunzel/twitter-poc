@@ -57,6 +57,7 @@ app.post('/gettweets', function(req, res) {
 			if(!error){
 				var tweetcount = tweets.length;
 				var date_str = '';
+				ins = [];
 				
 				for(var i = 0; i < tweetcount; i++){
 					var date = new Date(tweets[i].created_at);
@@ -69,12 +70,15 @@ app.post('/gettweets', function(req, res) {
 					});
 				}
 				
-				
+				if(ins.length > 0) {
+					db.tweetlist.insert(ins, function(error, doc) {
+						res.json(doc);
+					});
+				}
+			} else {
+				console.log(error)
+				res.json(error);
 			}
-			
-			db.tweetlist.insert(ins, function(error, doc) {
-				res.json(doc);
-			});	
 	});
 	// }
 	

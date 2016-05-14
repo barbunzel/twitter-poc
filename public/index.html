@@ -3,8 +3,9 @@
     <head>
         
         <style> /* set the CSS */
-
-            body { font: 12px Arial;}
+            * {
+                font-family: 'Open Sans', sans-serif;
+            }
             
             .line1 { 
                 stroke: #0066ff;
@@ -40,6 +41,9 @@
             
             .abs {
                 position: absolute;
+            }
+            
+            .fetch {
                 color: #44dd12;
             }
         
@@ -50,45 +54,35 @@
         <!-- Optional theme -->
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css" integrity="sha384-fLW2N01lMqjakBkx3l/M9EahuwpSfeNvV63J5ezn3uZzapT0u7EYsXMjQV+0En5r" crossorigin="anonymous">
                 
+        <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,600' rel='stylesheet' type='text/css'>    
         <!-- load the d3.js library -->    
             <script src="https://d3js.org/d3.v3.min.js"></script>
         <title>Twitter POC</title>
     </head>
     <body>
-        
         <div class="container" ng-controller="AppCtrl">
-            <h1>twitter poc</h1>
-            <table class="table">
-                <thead>
-                    <tr>
-                        <th></th>
-                        <th></th>
-                        <th></th>
-                        <th></th>
-                        <th></th>
-                        <th></th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        
-                        <th>User 1</th>
-                        <th><input ng-model="compare.handle1"></th>
-                        <th>vs</th>
-                        <th>User 2</th>
-                        <th><input ng-model="compare.handle2"></th>
-                        <th><button class="btn btn-primary" ng-click="twitterSearch()">Twitter Search</button></th>
-                    </tr>
-                </tbody>
-            </table>
-            
-            <table class="table">
-                <tr>
-                    <td><p class="abs">{{fetch}}</p></td>
-                </tr>
-            </table>
-            <div>
-                <div class="chart" chart-data="data"></div>
+            <div class="col-sm-8 col-sm-offset-2">
+                <h1>Twitter POC</h1>
+                <form name="tweetForm " ng-submit="twitterSearch(tweetForm.$valid)" novalidate>
+                    <div class="form-group col-sm-4" ng-class="{ 'has-error' : tweetForm.user1.$invalid && !tweetForm.user1.$pristine }">
+                        <label>Username 1</label>
+                        <input type="text" name="user1" ng-model="compare.handle1" required>
+                        <p ng-show="tweetForm.user1.$invalid && !tweetForm.user1.$pristine" class="help-block">Username 1 is required.</p>
+                    </div>
+                    <div class="form-group col-sm-4" ng-class="{ 'has-error' : tweetForm.user1.$invalid && !tweetForm.user1.$pristine }">
+                        <label>Username 2</label>
+                        <input type="text" name="user2" ng-model="compare.handle2" required>
+                        <p ng-show="tweetForm.user2.$invalid && !tweetForm.user2.$pristine" class="help-block">Username 2 is required.</p>
+                    </div>
+                    <div class="form-group col-sm-4">
+                        <button class="btn btn-primary" ng-disabled="tweetForm.$invalid">Twitter Search</button>
+                    </div>
+                </form>
+                <p class="abs fetch">{{fetch}}</p>
+                <p class="abs has-error">{{error}}</p>
+                <div>
+                    <div class="chart" chart-data="data"></div>
+                </div>
             </div>
         </div>
     
